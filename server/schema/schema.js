@@ -15,29 +15,6 @@ const {
     GraphQLNonNull
 } = graphql;
 
-// dummy data 
-
-const userData = [
-    { id: 'NMBJKBkjdsds', name: 'Joseph Daudi', age: 23, profession: 'Programmer'},
-    { id: '43hdnjwj', name: 'Anna Daudi', age: 25, profession: 'Programmer'},
-    { id: 'hfakjfnsakhre', name: 'Agness Daudi', age: 29, profession: 'Programmer'},
-    { id: '12423432421', name: 'Gabriella Daudi', age: 30, profession: 'Programmer'},
-]
-
-const hobbiesData = [
-    { id: '1', title: 'Programming', description: 'Software Pgogramming', userId: '12423432421'},
-    { id: '2', title: 'Swimming', description: 'Swimming', userId: '12423432421'},
-    { id: '3', title: 'Singing', description: 'Music Singer', userId: 'NMBJKBkjdsds'},
-    { id: '4', title: 'Fencing', description: 'Fency people',userId: 'NMBJKBkjdsds'},
-]
-
-const postData = [
-    { id: '1', comment: 'Software Pgogramming is great', userId: 'NMBJKBkjdsds'},
-    { id: '2', comment: 'GraphQL is fun', userId: '43hdnjwj'},
-    { id: '3', comment: 'Its a great thingto learn GraphQL', userId: 'hfakjfnsakhre'},
-    { id: '4', comment: 'How to change the world', userId: '43hdnjwj'},
-]
-
 // Create Types
 
 const UserType = new GraphQLObjectType({
@@ -51,13 +28,13 @@ const UserType = new GraphQLObjectType({
         posts: {
             type: new GraphQLList(PostType),
             resolve(parent, args){
-                return _.filter(postData, {userId: parent.id})
+                return Post.find({userId: parent.id})
             }
         },
         hobbies: {
             type: new GraphQLList(HobbyType),
             resolve(parent, args){
-                return _.filter(hobbiesData, {userId: parent.id})
+                return Hobby.find({userId: parent.id})
             }
         }
     })
@@ -73,7 +50,7 @@ const HobbyType = new GraphQLObjectType({
         user: {
             type: UserType,
             resolve(parent, args){
-                return _.find(userData, {id: parent.userId})
+                return User.findById(parent.userId)
             }
         }
     })
@@ -88,7 +65,7 @@ const PostType = new GraphQLObjectType({
         user: {
             type: UserType,
             resolve(parent, args){
-                return _.find(userData, {id: parent.userId})
+                return User.findById(parent.userId)
             }
         }
     })
